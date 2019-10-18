@@ -1,0 +1,13 @@
+{
+  "name": "kontent-sample-dancing-goat-gridsome",
+  "private": true,
+  "scripts": {
+    "build": "gridsome build",
+    "develop": "gridsome develop",
+    "explore": "gridsome explore"
+  },
+  "dependencies": {
+    "@meeg/gridsome-source-kentico-kontent": "^0.2.0",
+    "gridsome": "^0.6.9"
+  }
+}

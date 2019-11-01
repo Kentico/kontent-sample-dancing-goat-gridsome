@@ -105,6 +105,7 @@ export default {
         postDate : article.node.postDate,
         summary :  article.node.summary || "No summary",
         link : `/articles/${article.node.id}`,
+        title: article.node.title
       }))
     }
   },

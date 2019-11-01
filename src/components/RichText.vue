@@ -7,18 +7,43 @@ query RichText {
   item_link: allItemLink {
     edges {
       node {
-        id,
+        id
         path
       }
     }
   }
-   asset: allAsset {
+  asset: allAsset {
     edges {
       node {
-        id,
-        url(width: 1920, format: "webp"),
+        id
+        url(width: 1920, format: "webp")
         placeholderUrl: url(width: 50, format: "webp")
         description
+      }
+    }
+  }
+  tweet: allTweet {
+    edges {
+      node {
+        id
+        theme {
+          codename
+        }
+        tweetLink
+        displayOptions {
+          codename
+        }
+      }
+    }
+  }
+  hosted_video: allHostedVideo {
+    edges {
+      node {
+        id
+        videoHost {
+          codename
+        }
+        videoId
       }
     }
   }
@@ -26,15 +51,19 @@ query RichText {
 </static-query>
 
 <script>
-import VRuntimeTemplate from 'v-runtime-template'
-import ItemLink from './ItemLink';
 import Asset from './Asset'
+import HostedVideo from './HostedVideo'
+import ItemLink from './ItemLink';
+import Tweet from './Tweet'
+import VRuntimeTemplate from 'v-runtime-template'
 
 export default {
   components: {
-    ItemLink,
-    VRuntimeTemplate,
     Asset,
+    HostedVideo,
+    ItemLink,
+    Tweet,
+    VRuntimeTemplate,
   },
   props: {
     html: {

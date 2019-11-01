@@ -16,5 +16,12 @@ module.exports = {
         }
       }
     }
-  ]
+  ],
+  templates: {
+    Article: [
+      {
+        path: 'article/:codename'
+      }
+    ]
+  }
 }

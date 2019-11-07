@@ -41,7 +41,7 @@
 
 <static-query>
 query Articles {
-  articles: allArticle (sortBy: "postDate", limit:5) {
+  articles: allArticle (sortBy: "postDate") {
     edges {
       node {
         id

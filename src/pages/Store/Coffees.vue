@@ -81,7 +81,7 @@ export default {
       return this.$static.coffees.edges.map(edge => ({
         path: edge.node.path,
         name: edge.node.productName,
-        price: edge.node.price,
+        price: edge.node.price.toLocaleString('en-US', { style: 'currency', currency: 'USD' }),
         imageUrl: edge.node.image[0].url,
         productStatus: edge.node.productStatus && edge.node.productStatus.length > 0 ? edge.node.productStatus[0] : null,
         processing: edge.node.processing[0]

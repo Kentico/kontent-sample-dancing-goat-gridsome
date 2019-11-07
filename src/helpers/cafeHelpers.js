@@ -13,5 +13,6 @@ export function mapCafe (cafe) {
     dataAddress: `${cafe.city}, ${cafe.street}`,
     countryWithState,
     location,
+    email: cafe.email
   }
 }

@@ -50,6 +50,10 @@
         </div>
       </div>
       <h2 class="map-title">Drop in</h2>
+      <ContactMap
+            :cafesAddresses="cafesAddresses"
+            :focusOnAddress="selectedAddress"
+        />
     </div>
   </Layout>
 </template>
@@ -80,8 +84,12 @@ query ContactInfo {
 
 <script>
 import { mapCafe } from '../helpers/cafeHelpers'
+import ContactMap from '../components/ContactMap'
 
 export default {
+  components: {
+    ContactMap
+  },
   data: () => ({
     selectedAddress: null
   }),
@@ -92,6 +100,14 @@ export default {
     cafes: function () {
       return this.$static.cafes.edges.map(e => mapCafe(e.node))
     },
+    cafesAddresses: function(){
+      if (this.cafes.length === 0){
+        return [];
+      }
+      return this.cafes.map((cafe) => {
+        return `${cafe.city}, ${cafe.street}`;
+      })
+    }
   },
   methods: {
     handleRoasteryClick: function(){

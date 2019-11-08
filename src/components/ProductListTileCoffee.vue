@@ -4,7 +4,7 @@
       <g-link :to="coffee.path">
         <h1 class="product-heading">{{ coffee.name }}</h1>
         <span v-if="coffee.productStatus" class="product-tile-status">
-          {{ coffee.productStatus.name }}
+          {{ coffee.productStatus }}
         </span>
         <figure class="product-tile-image">
           <img

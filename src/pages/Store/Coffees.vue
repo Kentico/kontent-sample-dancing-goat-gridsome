@@ -53,16 +53,18 @@ query coffeeFilters {
   }
 }
 </static-query>
-
 <script>
 import Store from '../../layouts/Store'
 import ProductFilters from "../../components/ProductFilters"
 import ProductList from "../../components/ProductList"
 import ProductListTileCoffee from "../../components/ProductListTileCoffee"
 
+const FILTER_ID_PROCESSING = 'processing'
+const FILTER_ID_PRODUCT_STATUS = 'product_status'
+
 export default {
   data: () => ({
-    activeFilters: []
+    activeFilters: {}
   }),
   components: {
     Store,
@@ -71,82 +73,91 @@ export default {
     ProductListTileCoffee
   },
   computed: {
-    processingFilterOptions: function () {
-      return this.$static.processingTerms.edges.map(edge => this.mapTerm('processing', edge.node))
-    },
-    productStatusFilterOptions: function () {
-      return this.$static.productStatusTerms.edges.map(edge => this.mapTerm('product_status', edge.node))
-    },
     coffees: function () {
-      return this.$static.coffees.edges.map(edge => ({
-        path: edge.node.path,
-        name: edge.node.productName,
-        price: edge.node.price.toLocaleString('en-US', { style: 'currency', currency: 'USD' }),
-        imageUrl: edge.node.image[0].url,
-        productStatus: edge.node.productStatus && edge.node.productStatus.length > 0 ? edge.node.productStatus[0] : null,
-        processing: edge.node.processing[0]
-      }))
+      return this.$static.coffees.edges.map(edge => {
+        let filterValues = {}
+        filterValues[FILTER_ID_PROCESSING] = edge.node.processing.map(x => (x.id))
+        filterValues[FILTER_ID_PRODUCT_STATUS] = edge.node.productStatus.map(x => (x.id))
+
+        return {
+          path: edge.node.path,
+          name: edge.node.productName,
+          price: edge.node.price.toLocaleString('en-US', { style: 'currency', currency: 'USD' }),
+          imageUrl: edge.node.image[0].url,
+          productStatus: edge.node.productStatus && edge.node.productStatus.length > 0 ? edge.node.productStatus[0].name : null,
+          filterValues
+        }
+      })
     },
     coffeesFiltered: function () {
-      const productStatusFilters = this.activeFilters.filter(f => f.filterId === 'product_status').map(f => f.optionId)
-      const processingFilters = this.activeFilters.filter(f => f.filterId === 'processing').map(f => f.optionId)
+      return this.coffees.filter(item => {
+        let filterMatches = []
 
-      return this.coffees.filter(c => {
-        let matchesStatus = false
-        const statusFilterIsApplied = productStatusFilters.length > 0
-        if (statusFilterIsApplied) {
-          const productHasStatus = c.productStatus
-          if (productHasStatus) {
-            matchesStatus = productStatusFilters
-              .includes(c.productStatus.id)
+        for (const filterId in this.activeFilters) {
+          const activeOptions = this.activeFilters[filterId]
+          const filterIsApplied = activeOptions && activeOptions.length > 0
+          if (filterIsApplied) {
+            const itemOptions = item.filterValues && item.filterValues[filterId] ? item.filterValues[filterId] : []
+            const matches = itemOptions.some(i => activeOptions.includes(i))
+            if (!matches) {
+              return false
+            }
           }
-        } else {
-          matchesStatus = true
         }
 
-        let matchesProcessing = false
-        const processingFilterIsApplied = processingFilters.length > 0
-        if (processingFilterIsApplied) {
-          const productHasProcessing = c.processing
-          if (productHasProcessing) {
-            matchesProcessing = processingFilters
-              .includes(c.processing.id)
-          }
-        } else {
-          matchesProcessing = true
-        }
-
-        return matchesStatus && matchesProcessing
+        return true
       })
     },
     filters: function () {
+      const processingFilterOptions = this.$static.processingTerms.edges.map(edge => this.mapTerm(FILTER_ID_PROCESSING, edge.node))
+      const productStatusFilterOptions = this.$static.productStatusTerms.edges.map(edge => this.mapTerm(FILTER_ID_PRODUCT_STATUS, edge.node))
       return [
-        { title: 'Coffee processing', id: 'processing', options: this.processingFilterOptions },
-        { title: 'Status', id: 'product_status', options: this.productStatusFilterOptions }
+        { title: 'Coffee processing', id: FILTER_ID_PROCESSING, options: processingFilterOptions },
+        { title: 'Status', id: FILTER_ID_PRODUCT_STATUS, options: productStatusFilterOptions }
       ]
     }
   },
   methods: {
-    toggleFilterOption: function (details) {
-      const index = this.activeFilters.findIndex(x => (x.filterId === details.filterId && x.optionId === details.optionId))
-      console.log(index, this.activeFilters[index])
-      if (index < 0) this.activeFilters.push(details); else this.activeFilters.splice(index, 1);
+    toggleFilterOption: function (filterOption) {
+      const { filterId, optionId } = filterOption
+
+      const filterIsActive = this.isFilterActivated(filterId)
+      if (!filterIsActive) {
+        this.$set(this.activeFilters, filterId, [])
+      }
+
+      const optionIndex = this.activeFilters[filterId].indexOf(optionId)
+
+      if (optionIndex > -1) {
+        this.activeFilters[filterId].splice(optionIndex, 1)
+      } else {
+        this.activeFilters[filterId].push(optionId)
+      }
     },
     mapTerm: function (filterId, node) {
-      const details = {
+      const filterOption = {
         filterId: filterId,
         optionId: node.id
       }
-      const index = this.activeFilters.findIndex(x => this.isSameFilter(x, details))
-
+      const selected = this.isFilterOptionSelected(filterOption)
       return {
         id: node.id,
         name: node.name,
-        checked: index >= 0
+        selected
       }
     },
-    isSameFilter (a, b) {
-      return a.filterId === b.filterId && a.optionId === b.optionId
+    isFilterOptionSelected: function (filterOption) {
+      const { filterId, optionId } = filterOption
+      if (this.isFilterActivated(filterId)) {
+        const optionIndex = this.activeFilters[filterId].indexOf(optionId)
+        return optionIndex > -1
+      }
+
+      return false
+    },
+    isFilterActivated: function (filterId) {
+      const activeFilterIds = Object.keys(this.activeFilters)
+      return activeFilterIds.includes(filterId)
     }
   }
 }

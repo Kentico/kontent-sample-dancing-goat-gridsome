@@ -4,7 +4,7 @@
       <h4 :key="filter.id">{{ filter.title }}</h4>
       <div v-for="option in filter.options" :key="option.id">
         <span class="checkbox js-postback">
-          <input :id="option.id" type="checkbox" :checked="option.checked" />
+          <input :id="option.id" type="checkbox" :checked="option.selected" />
           <label
             :htmlFor="option.id"
             @click="
@@ -18,21 +18,6 @@
         </span>
       </div>
     </template>
-
-    <!-- <div v-for="processing in processingsData" :key="processing.codename">
-      <span class="checkbox js-postback">
-        <input
-          :id="processing.codename"
-          type="checkbox"
-          :checked="processing.checked"
-        />
-        <label
-          :htmlFor="processing.codename"
-          @click="processingOnChange(processing.codename)"
-          >{{ processing.name }}</label
-        >
-      </span>
-    </div> -->
   </aside>
 </template>
 

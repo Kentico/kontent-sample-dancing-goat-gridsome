@@ -51,7 +51,12 @@ export default {
   },
   computed: {
     activeFilterOptions: function () {
-      return this.activeFilters.flatMap(f => f[1])
+      return this.activeFilters
+        .map(f => f[1])
+        .reduce((a, b) => {
+          console.log("wut")
+          return a.concat(b)
+        }, [])
     },
     productsFiltered: function () {
       return this.products.filter(p => {

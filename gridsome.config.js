@@ -20,7 +20,18 @@ module.exports = {
   templates: {
     Article: [
       {
-        path: 'article/:codename'
+        path: 'articles/:codename'
+      }
+    ],
+    Coffee: [
+      {
+        path: 'coffees/:codename'
+      }
+    ]
+    ,
+    Brewers: [
+      {
+        path: 'brewers/:codename'
       }
     ]
   }

@@ -28,6 +28,7 @@ query coffeeListing {
   brewers: allBrewer(order: ASC) {
     edges {
       node {
+        path
         productName
         image {
           url

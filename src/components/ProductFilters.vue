@@ -4,12 +4,12 @@
       <h4 :key="filter.id">{{ filter.title }}</h4>
       <div v-for="option in filter.options" :key="option.id">
         <span class="checkbox js-postback">
-          <input :id="option.id" type="checkbox" :checked="option.selected" />
+          <input :id="option.id" type="checkbox" :checked="isSelected(option.id)" />
           <label
             :htmlFor="option.id"
             @click="
               $emit('toggleFilterOption', {
-                filterId: filter.id,
+                filterTitle: filter.title,
                 optionId: option.id
               })
             "
@@ -27,6 +27,15 @@ export default {
     filters: {
       type: Array,
       required: true
+    },
+    selectedOptions: {
+      type: Array,
+      required: true
+    },
+  },
+  methods: {
+    isSelected: function(optionId) {
+      return this.$props.selectedOptions.includes(optionId)
     }
   }
 }

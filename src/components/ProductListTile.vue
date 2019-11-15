@@ -1,22 +1,22 @@
 <template>
   <div class="col-md-6 col-lg-4">
     <article class="product-tile">
-      <g-link :to="coffee.path">
-        <h1 class="product-heading">{{ coffee.name }}</h1>
-        <span v-if="coffee.productStatus" class="product-tile-status">
-          {{ coffee.productStatus }}
+      <g-link :to="product.path">
+        <h1 class="product-heading">{{ product.name }}</h1>
+        <span v-if="product.productStatus" class="product-tile-status">
+          {{ product.productStatus }}
         </span>
         <figure class="product-tile-image">
           <img
-            :alt="coffee.name"
+            :alt="product.name"
             class=""
-            :src="coffee.imageUrl"
-            :title="coffee.name"
+            :src="product.imageUrl"
+            :title="product.name"
           />
         </figure>
         <div class="product-tile-info">
           <span class="product-tile-price">
-            {{ coffee.price }}
+            {{ product.price }}
           </span>
         </div>
       </g-link>
@@ -26,7 +26,7 @@
 <script>
 export default {
   props: {
-    coffee: {
+    product: {
       type: Object,
       required: true
     }

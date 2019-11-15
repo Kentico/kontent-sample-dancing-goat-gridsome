@@ -1,5 +1,5 @@
 <template>
-  <Coffees></Coffees>
+  <Coffees />
 </template>
 
 <script>

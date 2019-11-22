@@ -1,0 +1,6 @@
+[build]
+  publish = "dist"
+  command = "gridsome build"
+[template.environment]
+  KENTICO_KONTENT_PROJECT_ID = "set to your Kontent project ID"
+  GOOGLE_MAPS_KEY = "set to your Google Maps API key"

@@ -18,21 +18,30 @@ module.exports = {
     }
   ],
   templates: {
+    AboutUs: [
+      {
+        path: '/about-us/:codename'
+      }
+    ],
     Article: [
       {
-        path: 'articles/:codename'
+        path: '/articles/:codename'
+      }
+    ],
+    Brewer: [
+      {
+        path: '/brewers/:codename'
       }
     ],
     Coffee: [
       {
-        path: 'coffees/:codename'
+        path: '/coffees/:codename'
       }
-    ]
-    ,
-    Brewers: [
+    ],
+    FactAboutUs: [
       {
-        path: 'brewers/:codename'
+        path: '/fact-about-us/:codename'
       }
-    ]
+    ],
   }
 }
